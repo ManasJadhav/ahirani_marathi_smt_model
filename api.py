@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import models.smt_translation as smt_translation;
 import configparser
+import os
 
 app = Flask(__name__)
 
@@ -8,11 +9,11 @@ config = configparser.ConfigParser()
 try:
     config.read('config.ini')
 except FileNotFoundError:
-    print("Error: Configuration file 'config.ini' not found. Using default values.")
+    pass
 
 # defining default value if config.ini not found
-API_HOST = config.get('server', 'host', fallback='0.0.0.0')
-API_PORT = config.get('server', 'port', fallback='5000')
+API_HOST = os.environ.get('API_HOST', '0.0.0.0') 
+API_PORT = os.environ.get('API_PORT', 5000)
 
 print(f"API server listening on {API_HOST}:{API_PORT}")
 
