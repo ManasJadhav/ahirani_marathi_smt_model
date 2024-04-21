@@ -40,8 +40,10 @@ def lower_and_split_punct(text):
 training_data = {lower_and_split_punct(key): lower_and_split_punct(value) for key, value in training_data.items()}
 
 # Function to train IBM Model 1
-def train_ibm_model1(training_data):
-    translation_model = {}
+from collections import defaultdict
+
+def train_ibm_model1(training_data, num_iterations=5):
+    translation_model = defaultdict(lambda: defaultdict(float))
     source_vocab = set()
     target_vocab = set()
 
@@ -53,15 +55,15 @@ def train_ibm_model1(training_data):
         target_vocab.update(target_tokens)
 
     # Initialize translation probabilities uniformly
-    initial_prob = 1 / len(target_vocab)
+    initial_prob = 1.0 / len(target_vocab)
     for src_word in source_vocab:
-        translation_model[src_word] = {tgt_word: initial_prob for tgt_word in target_vocab}
+        for tgt_word in target_vocab:
+            translation_model[src_word][tgt_word] = initial_prob
 
     # Iteratively improve translation probabilities using EM algorithm (Expectation-Maximization)
-    num_iterations = 1
     for _ in range(num_iterations):
-        count = {src_word: {tgt_word: 0 for tgt_word in target_vocab} for src_word in source_vocab}
-        total = {src_word: 0 for src_word in source_vocab}
+        count = defaultdict(lambda: defaultdict(float))
+        total = defaultdict(float)
 
         # E-step: Estimate expected counts
         for src_sentence, tgt_translation in training_data.items():
