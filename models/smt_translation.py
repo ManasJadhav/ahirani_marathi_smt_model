@@ -4,7 +4,7 @@ import unicodedata
 from ai4bharat.transliteration import XlitEngine
 
 
-indic_to_latin_engine = XlitEngine(src_script_type="indic", beam_width=10, rescore=False)
+indic_to_latin_engine = XlitEngine( beam_width=10, rescore=False)
 latin_to_indic_engine = XlitEngine("mr", beam_width=10, rescore=True)
 
 
