@@ -1,3 +1,4 @@
 flask
 pandas
 ai4bharat-transliteration
+git+https://github.com/One-sixth/fairseq.git
